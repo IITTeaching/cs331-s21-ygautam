@@ -340,7 +340,7 @@ class ArrayList:
         ### BEGIN SOLUTION
         x = self.copy()
         l = self.len
-        for i in range(other.len):
+        for i in range(0,len(other)):
           x.append(other[i])
           l+=1
     
@@ -364,8 +364,17 @@ class ArrayList:
     def extend(self, other):
         """Adds all elements, in order, from other --- an Iterable --- to this list."""
         ### BEGIN SOLUTION
-        
+        y = self.len
+        self.len +=len(other)
+        x = ConstrainedList(self.len)
 
+        for i in range(self.len):
+          if(i<y):
+            x[i]=self.data[i]
+          else:
+            x[i]=other[i-y]
+          
+        self.data = x
         ### END SOLUTION
 
 
@@ -598,6 +607,7 @@ def test_case_6():
     lst.extend(range(10))
     lst.extend(range(10,0,-1))
     lst.extend(data.copy())
+    print(lst)
     tc.assertEqual(70, len(lst))
     tc.assertEqual(list(range(10))+list(range(10,0,-1))+data, arrayListToList(lst))
     suc()
