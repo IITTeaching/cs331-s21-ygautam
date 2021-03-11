@@ -72,6 +72,8 @@ class ArrayList:
     def __init__(self, n=0):
         self.data = ConstrainedList(n) # don't change this line!
         self.len = n # the attribute self.len should be record the length of the list (do not rename!)
+        self.n = 0
+        
 
     ### subscript-based access ###
 
@@ -383,8 +385,20 @@ class ArrayList:
     def __iter__(self):
         """Supports iteration (via `iter(self)`)"""
         ### BEGIN SOLUTION
-      
+        
+        return self.copy()
         ### END SOLUTION
+    def __next__(self):
+       
+        if(self.n<self.len):
+          
+          x = self.data[self.n]
+          self.n+=1
+          return x 
+        else: 
+          raise StopIteration
+     
+        
 
 ################################################################################
 # TEST CASES
@@ -624,10 +638,12 @@ def test_case_7():
     lst.data = ConstrainedList.create(data)
     lst.len = len(lst.data)
     tc.assertEqual(data, [x for x in lst])
-
+    
     it1 = iter(lst)
     it2 = iter(lst)
+    
     for x in data:
+        
         tc.assertEqual(next(it1), x)
         tc.assertEqual(next(it2), x)
     suc()
