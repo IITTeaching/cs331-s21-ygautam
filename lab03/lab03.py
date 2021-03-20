@@ -252,16 +252,22 @@ def test3_2():
     md_text = urllib.request.urlopen(md_url).read().decode()
     s = SuffixArray(md_text[0:1000])
 <<<<<<< HEAD
+<<<<<<< HEAD
     print(md_text[0:1000])
     # tc.assertTrue(s.contains("Moby Dick"))
     # tc.assertTrue(s.contains("Herman Melville"))
     # tc.assertEqual(s.positions("Moby Dick"), [427])
 =======
+=======
+>>>>>>> 3b90e71fa3cc549d4d012a10ff9ec2419423f5e0
     tc.assertTrue(s.contains("Moby-Dick"))
     tc.assertTrue(s.contains("Herman Melville"))
     posset = set(s.positions("Moby-Dick"))
     tc.assertEqual(posset, {355, 356})
+<<<<<<< HEAD
 >>>>>>> 510e22a975f6dab2cb5e6d567c1e36a37e3e9033
+=======
+>>>>>>> 3b90e71fa3cc549d4d012a10ff9ec2419423f5e0
 
 
 #################################################################################
