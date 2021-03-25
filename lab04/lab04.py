@@ -73,7 +73,7 @@ class ArrayList:
         self.data = ConstrainedList(n) # don't change this line!
         self.len = n # the attribute self.len should be record the length of the list (do not rename!)
         self.n = 0
-        
+
 
     ### subscript-based access ###
 
@@ -124,14 +124,14 @@ class ArrayList:
 
           x+= str(self.data[i])
           if(self.len!=1 and i!=self.len-1):
-            
+
             x+=", "
-          
+
 
         x+="]"
-        
+
         return x
-        
+
         ### END SOLUTION
 
     def __repr__(self):
@@ -141,14 +141,14 @@ class ArrayList:
         for i in range(self.len):
           x+= str(self.data[i])
           if(self.len!=1 and i!=self.len-1):
-            
+
             x+=", "
-          
+
 
         x+="]"
-        
+
         return x
-        
+
         ### END SOLUTION
 
 
@@ -157,14 +157,14 @@ class ArrayList:
     def append(self, value):
         """Appends value to the end of this list."""
         ### BEGIN SOLUTION
-        
+
         self.len = self.len+1
         x = ConstrainedList(self.len)
         for i in range(0,self.len-1):
           x[i]=self.data[i]
         x[self.len-1]=value
         self.data = x
-        
+
         ### END SOLUTION
 
     def insert(self, idx, value):
@@ -172,7 +172,7 @@ class ArrayList:
         list, as needed. Note that inserting a value at len(self) --- equivalent
         to appending the value --- is permitted. Raises IndexError if idx is invalid."""
         ### BEGIN SOLUTION
-      
+
         j = 0
         self.len = self.len+1
         if(idx>=self.len):
@@ -184,36 +184,36 @@ class ArrayList:
             j+=1
           else:
             x[i]=value
-            
-            
-          
-          
-        
+
+
+
+
+
         self.data = x
-        
+
         ### END SOLUTION
 
     def pop(self, idx=-1):
         """Deletes and returns the element at idx (which is the last element,
         by default)."""
         j = 0
-         
+
         self.len = self.len-1
         x = ConstrainedList(self.len)
         for i in range(0,self.len):
           if(i==idx):
-            
+
             j+= 1
-          
+
           x[i]=self.data[j]
           j+=1
-        thing =self.data[idx]  
-        self.data = x   
-            
-          
+        thing =self.data[idx]
+        self.data = x
+
+
         return thing
-        
-        
+
+
         ### BEGIN SOLUTION
         ### END SOLUTION
 
@@ -221,7 +221,7 @@ class ArrayList:
         """Removes the first (closest to the front) instance of value from the
         list. Raises a ValueError if value is not found in the list."""
         ### BEGIN SOLUTION
-        thing = False 
+        thing = False
         j = 0
         self.len = self.len-1
         x = ConstrainedList(self.len)
@@ -231,14 +231,14 @@ class ArrayList:
             j+=1
           x[i]=self.data[j]
           j+=1
-         
-        self.data = x   
-            
+
+        self.data = x
+
         if(not thing):
           raise ValueError
-        
+
         self.data = x
-        
+
 
 
 
@@ -311,13 +311,13 @@ class ArrayList:
         limit = j
         if(j == None):
           limit = self.len
-        
+
         if(j!=None and j<0):
           limit = self.len+j
         for x in range(i,limit):
           if(self.data[x]==value):
             return x
-       
+
 
         raise ValueError
         ### END SOLUTION
@@ -325,11 +325,11 @@ class ArrayList:
     def count(self, value):
         """Returns the number of times value appears in this list."""
         ### BEGIN SOLUTION
-        j = 0; 
+        j = 0;
         for i in range(self.len):
           if(self.data[i]==value):
             j+=1
-        return j 
+        return j
         ### END SOLUTION
 
 
@@ -345,7 +345,7 @@ class ArrayList:
         for i in range(0,len(other)):
           x.append(other[i])
           l+=1
-    
+
         return x
         ### END SOLUTION
 
@@ -375,7 +375,7 @@ class ArrayList:
             x[i]=self.data[i]
           else:
             x[i]=other[i-y]
-          
+
         self.data = x
         ### END SOLUTION
 
@@ -385,20 +385,20 @@ class ArrayList:
     def __iter__(self):
         """Supports iteration (via `iter(self)`)"""
         ### BEGIN SOLUTION
-        
+
         return self.copy()
         ### END SOLUTION
     def __next__(self):
-       
+
         if(self.n<self.len):
-          
+
           x = self.data[self.n]
           self.n+=1
-          return x 
-        else: 
+          return x
+        else:
           raise StopIteration
-     
-        
+
+
 
 ################################################################################
 # TEST CASES
@@ -442,7 +442,7 @@ def test_case_1():
     for i in range(len(data)):
         lst[i] = data[i] = random.randint(101, 200)
     for i in range(50):
-        to_del = random.randrange(len(data))
+        to_del = random.randrange(0,len(data))
         del lst[to_del]
         del data[to_del]
 
@@ -485,7 +485,7 @@ def test_case_3():
     data = []
 
     for _ in range(100):
-        to_add = random.randrange(1000)
+        to_add = random.randrange(0,1000)
         data.append(to_add)
         lst.append(to_add)
 
@@ -493,7 +493,7 @@ def test_case_3():
     tc.assertEqual(data, arrayListToList(lst))
 
     for _ in range(100):
-        to_ins = random.randrange(1000)
+        to_ins = random.randrange(0,1000)
         ins_idx = random.randrange(len(data)+1)
         data.insert(ins_idx, to_ins)
         lst.insert(ins_idx, to_ins)
@@ -501,13 +501,13 @@ def test_case_3():
     tc.assertEqual(data, arrayListToList(lst))
 
     for _ in range(100):
-        pop_idx = random.randrange(len(data))
+        pop_idx = random.randrange(0,len(data))
         tc.assertEqual(data.pop(pop_idx), lst.pop(pop_idx))
 
     tc.assertEqual(data, arrayListToList(lst))
 
     for _ in range(25):
-        to_rem = data[random.randrange(len(data))]
+        to_rem = data[random.randrange(0,len(data))]
         data.remove(to_rem)
         lst.remove(to_rem)
 
@@ -560,7 +560,7 @@ def test_case_5():
         lst.index(1)
 
     import random
-    data = [random.randrange(1000) for _ in range(100)]
+    data = [random.randrange(0,1000) for _ in range(100)]
     lst.data = ConstrainedList.create(data)
     lst.len = len(lst.data)
 
@@ -598,8 +598,8 @@ def test_case_6():
     tc.assertIsInstance(lst3, ArrayList)
     tc.assertEqual([], arrayListToList(lst3))
 
-    data  = [random.randrange(1000) for _ in range(50)]
-    data2 = [random.randrange(1000) for _ in range(50)]
+    data  = [random.randrange(0,1000) for _ in range(50)]
+    data2 = [random.randrange(0,1000) for _ in range(50)]
     lst.data = ConstrainedList.create(data)
     lst.len = len(lst.data)
     lst2.data = ConstrainedList.create(data2)
@@ -638,12 +638,12 @@ def test_case_7():
     lst.data = ConstrainedList.create(data)
     lst.len = len(lst.data)
     tc.assertEqual(data, [x for x in lst])
-    
+
     it1 = iter(lst)
     it2 = iter(lst)
-    
+
     for x in data:
-        
+
         tc.assertEqual(next(it1), x)
         tc.assertEqual(next(it2), x)
     suc()
