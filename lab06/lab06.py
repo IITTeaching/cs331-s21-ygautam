@@ -49,8 +49,29 @@ def check_delimiters(expr):
     """Returns True if and only if `expr` contains only correctly matched delimiters, else returns False."""
     delim_openers = '{([<'
     delim_closers = '})]>'
-
+    
+    
     ### BEGIN SOLUTION
+    
+    z = 0
+    y = ""
+    for i in range(len(expr)):
+      if(expr[i] in delim_openers):
+        y+=expr[i]
+      if(expr[i] in delim_closers):
+        y+=expr[i]
+    x = len(y)
+    if(x%2!=0):
+      return False
+    x = x/2
+    for i in range(int(x)):
+      for j in range(0,len(y)):
+        if(y[j] in delim_openers):
+          z = j
+      if(delim_openers.find(y[z])!=delim_closers.find(y[z+1])):
+        return False
+          
+    return True
     ### END SOLUTION
 
 ################################################################################
@@ -121,6 +142,37 @@ def infix_to_postfix(expr):
     postfix = []
     toks = expr.split()
     ### BEGIN SOLUTION
+    thing = expr.split()
+
+    for i in range(len(thing)):
+      if(thing[i].isdigit()):
+        postfix.append(thing[i])
+      elif(ops.empty() or ops.peek()=='('):
+        ops.push(thing[i])
+      elif(thing[i] =='('):
+        ops.push(thing[i])
+      elif(thing[i]==')'):
+        x = ops.pop()
+        while(x!='('):
+          postfix.append(x)
+          x= ops.pop()
+      else:
+        blah=True
+        while(blah):
+          token_prec = prec.get(thing[i],0)
+          top_prec = prec.get(ops.peek(),0)
+          if(token_prec>top_prec):
+            ops.push(thing[i])
+          elif(token_prec==top_prec):
+            postfix.append(ops.pop())
+            ops.push(thing[i])
+          if(token_prec<top_prec):
+            postfix.append(ops.pop())
+          else:
+            blah = False
+    while(not ops.empty()):
+      postfix.append(ops.pop())
+    
     ### END SOLUTION
     return ' '.join(postfix)
 
@@ -160,25 +212,59 @@ class Queue:
         self.data = [None] * limit
         self.head = -1
         self.tail = -1
-
+        self.n = 0
     ### BEGIN SOLUTION
     ### END SOLUTION
 
     def enqueue(self, val):
         ### BEGIN SOLUTION
+          x = 0
+          y = 0
+          while(x<len(self.data)):
+            if(self.data[x]==None):
+              y = x
+              x=len(self.data)
+            x+=1
+
+          if(self.data[y]!=None):
+            raise RuntimeError
+          self.data[y]= val
+          self.head = y
+          print(self.data)
         ### END SOLUTION
 
     def dequeue(self):
         ### BEGIN SOLUTION
+        x = 0
+        y = 0
+        while(x<len(self.data)):
+            if(self.data[x]!=None):
+              y = x
+              x=len(self.data)
+            x+=1
+        if(self.data[y]==None):
+          raise RuntimeError
+        
+        x1 = self.data[y]
+        self.tail = y+1
+        self.data[y]= None
+
+        return x1
         ### END SOLUTION
 
     def resize(self, newsize):
         assert(len(self.data) < newsize)
         ### BEGIN SOLUTION
+        
+        
         ### END SOLUTION
 
     def empty(self):
         ### BEGIN SOLUTION
+        for i in range(len(self.data)):
+          if(self.data[i]!=None):
+            return False
+        return True
         ### END SOLUTION
 
     def __bool__(self):
@@ -194,7 +280,13 @@ class Queue:
 
     def __iter__(self):
         ### BEGIN SOLUTION
+        cur = self.data[self.n]
+        while cur:
+            yield cur.val
+            self.n+=1
         ### END SOLUTION
+    
+      
 
 ################################################################################
 # QUEUE IMPLEMENTATION - TEST CASES
@@ -212,7 +304,7 @@ def test_queue_implementation_1():
 
     with tc.assertRaises(RuntimeError):
         q.enqueue(5)
-
+  
     for i in range(5):
         tc.assertEqual(q.dequeue(), i)
 
@@ -245,7 +337,7 @@ def test_queue_implementation_2():
 
 	for x, y in zip(q, [5] + list(range(9))):
 	    tc.assertEqual(x, y)
-
+  
 	tc.assertEqual(q.dequeue(), 5)
 	for i in range(9):
 	    tc.assertEqual(q.dequeue(), i)
