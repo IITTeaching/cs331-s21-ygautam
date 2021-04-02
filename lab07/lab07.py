@@ -9,23 +9,54 @@ class ExtensibleHashTable:
     def __init__(self, n_buckets=1000, fillfactor=0.5):
         self.n_buckets = n_buckets
         self.fillfactor = fillfactor
-        self.buckets = [None] * n_buckets
+        self.buckets = [[]] * n_buckets
         self.nitems = 0
 
     def find_bucket(self, key):
         # BEGIN_SOLUTION
+        h = hash(key)
+        bucket = self.buckets[h % len(self.buckets)]
+        for k in bucket:
+            if(k[0] == key):
+                return k
         # END_SOLUTION
 
     def __getitem__(self,  key):
         # BEGIN_SOLUTION
+        h = hash(key)
+        for k in self.buckets[h % len(self.buckets)]:
+            if(k[0] == key):
+                return k[1]
+        raise KeyError
         # END_SOLUTION
 
     def __setitem__(self, key, value):
         # BEGIN_SOLUTION
+        h = hash(key)
+        bucket = self.buckets[h % len(self.buckets)]
+        for k in bucket:
+            if(k[0] == key):
+                k[1] = value
+        bucket.append([key,value])
+        self.nitems+=1
+        if(self.nitems>self.fillfactor*self.n_buckets):
+          x = [[]] * self.n_buckets*2
+          self.n_buckets = self.n_buckets*2
+          for k in self.buckets:
+            x.append(k)
+          
+
         # END_SOLUTION
 
     def __delitem__(self, key):
         # BEGIN SOLUTION
+        h = hash(key)
+        bucket = self.buckets[h % len(self.buckets)]
+        for k in bucket:
+            if(k[0] == key):
+                k[0] = None
+                self.nitems-=1
+        
         # END SOLUTION
 
     def __contains__(self, key):
@@ -43,6 +74,9 @@ class ExtensibleHashTable:
 
     def __iter__(self):
         ### BEGIN SOLUTION
+      for x in self.buckets:
+          if x is not None:
+            yield x[0]
         ### END SOLUTION
 
     def keys(self):
@@ -50,10 +84,16 @@ class ExtensibleHashTable:
 
     def values(self):
         ### BEGIN SOLUTION
+        for x in self.buckets:
+          if x is not None:
+            yield x[1]
         ### END SOLUTION
 
     def items(self):
         ### BEGIN SOLUTION
+        for x in self.buckets:
+          if x is not None:
+            yield tuple(x)
         ### END SOLUTION
 
     def __str__(self):
