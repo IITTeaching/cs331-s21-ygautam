@@ -35,6 +35,7 @@ class Heap:
           idx = 0 
           x1 = 0
 
+
           if(self._left(idx)<len(self.data) and self._right(idx)<len(self.data)):
             if(self.key(self.data[self._left(idx)])<self.key(self.data[self._right(idx)])):
               x1 = self._right(idx)
@@ -44,11 +45,21 @@ class Heap:
             x1 = self._left(idx)
 
 
-          if(self.key(self.data[x1])>self.key(self.data[idx])):
-            x = self.data
-            self.data=[]
-            for i in range(0,len(x)):
-              self.add(x[i])
+
+          while(self.key(self.data[idx])<self.key(self.data[x1])):
+            x2 = self.data[idx]
+            y2 = self.data[x1]
+            self.data[x1] = x2
+            self.data[idx] = y2
+            idx = x1
+            if(self._left(idx)<len(self.data) and self._right(idx)<len(self.data)):
+              if(self.key(self.data[self._left(idx)])<self.key(self.data[self._right(idx)])):
+                x1 = self._right(idx)
+              else:
+                x1 = self._left(idx)
+            elif(self._left(idx)<len(self.data)):
+              x1 = self._left(idx)
+            
 
 
 
