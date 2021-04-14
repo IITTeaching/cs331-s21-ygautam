@@ -279,13 +279,13 @@ def say_success():
 # MAIN
 ################################################################################
 def main():
-    for t in [#test_key_heap_1,
-              #test_key_heap_2,
-              #test_key_heap_3,
-              #test_key_heap_4,
-              #test_key_heap_5,
-              #test_median_1,
-              #test_median_2,
+    for t in [test_key_heap_1,
+              test_key_heap_2,
+              test_key_heap_3,
+              test_key_heap_4,
+              test_key_heap_5,
+              test_median_1,
+              test_median_2,
               test_median_3,
               test_topk_students
               ]:
