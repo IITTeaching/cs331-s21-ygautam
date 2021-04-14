@@ -184,7 +184,6 @@ def running_medians(iterable):
             min_heap.add(max_heap.pop())
           x1 = len(min_heap)
           y1 = len(max_heap)
-        medians.append(0)
         if(abs(x1-y1)==1):
           if(x1>y1):
             medians.append(min_heap.peek())
