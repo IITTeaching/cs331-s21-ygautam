@@ -24,10 +24,41 @@ class Heap:
 
     def heapify(self, idx=0):
         ### BEGIN SOLUTION
+        if(len(self.data)>idx):
+          while(self.key(self.data[idx])>self.key(self.data[self._parent(idx)]) and (self._parent(idx)>=0)):
+            x = self.data[self._parent(idx)]
+            y = self.data[idx]
+            self.data[idx] = x
+            self.data[self._parent(idx)] = y
+            idx = self._parent(idx)
+
+          idx = 0 
+          x1 = 0
+
+          if(self._left(idx)<len(self.data) and self._right(idx)<len(self.data)):
+            if(self.key(self.data[self._left(idx)])<self.key(self.data[self._right(idx)])):
+              x1 = self._right(idx)
+            else:
+              x1 = self._left(idx)
+          elif(self._left(idx)<len(self.data)):
+            x1 = self._left(idx)
+
+
+          if(self.key(self.data[x1])>self.key(self.data[idx])):
+            x = self.data
+            self.data=[]
+            for i in range(0,len(x)):
+              self.add(x[i])
+
+
+
+        
         ### END SOLUTION
 
     def add(self, x):
         ### BEGIN SOLUTION
+        self.data.append(x)
+        self.heapify(len(self.data)-1) 
         ### END SOLUTION
 
     def peek(self):
@@ -107,8 +138,10 @@ def test_key_heap_4():
     for x in lst:
         h.add(x)
 
+
     for x in range(999, -1000, -1):
         tc.assertEqual(x, h.pop())
+        
 
 # (6 points)
 def test_key_heap_5():
@@ -121,7 +154,7 @@ def test_key_heap_5():
 
     for x in lst:
         h.add(x)
-
+    
     for x in reversed(sorted(range(-1000, 1000, 3), key=lambda x:abs(x))):
         tc.assertEqual(x, h.pop())
 
@@ -130,6 +163,38 @@ def test_key_heap_5():
 ################################################################################
 def running_medians(iterable):
     ### BEGIN SOLUTION
+    min_heap = Heap(key = lambda x:-x)
+    max_heap = Heap()
+    medians = []
+    for i, x in enumerate(iterable):
+      if(len(medians)==0):
+        medians.append(x)
+        max_heap.add(x)
+      else: 
+        if(x<medians[i-1]):
+         max_heap.add(x)
+        else:
+          min_heap.add(x)
+        x1 = len(min_heap)
+        y1 = len(max_heap)
+        if(abs(x1-y1)>1):
+          if(x1>y1):
+            max_heap.add(min_heap.pop())
+          else: 
+            min_heap.add(max_heap.pop())
+          x1 = len(min_heap)
+          y1 = len(max_heap)
+        medians.append(0)
+        if(abs(x1-y1)==1):
+          if(x1>y1):
+            medians.append(min_heap.peek())
+          else:
+            medians.append(max_heap.peek())
+        elif(x1==y1):
+          thing = (max_heap.peek()+min_heap.peek())/2
+          medians.append(thing)
+      
+    return medians
     ### END SOLUTION
 
 ################################################################################
@@ -174,6 +239,7 @@ def test_median_3():
 ################################################################################
 def topk(items, k, keyf):
     ### BEGIN SOLUTION
+    x = 1
     ### END SOLUTION
 
 ################################################################################
@@ -213,13 +279,13 @@ def say_success():
 # MAIN
 ################################################################################
 def main():
-    for t in [test_key_heap_1,
-              test_key_heap_2,
-              test_key_heap_3,
-              test_key_heap_4,
-              test_key_heap_5,
-              test_median_1,
-              test_median_2,
+    for t in [#test_key_heap_1,
+              #test_key_heap_2,
+              #test_key_heap_3,
+              #test_key_heap_4,
+              #test_key_heap_5,
+              #test_median_1,
+              #test_median_2,
               test_median_3,
               test_topk_students
               ]:
