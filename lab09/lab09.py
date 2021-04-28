@@ -5,7 +5,6 @@ import random
 
 class HBStree:
     """This is an immutable binary search tree with history.
-
     Each insert and delete operation creates a new version of the tree. The data
     structure allows past versions to be accessed.
     """
@@ -53,6 +52,16 @@ class HBStree:
         KeyError, if key does not exist.
         """
         # BEGIN SOLUTION
+        x = self.root_versions[-1]
+        while(x):
+            if(x.val == key):
+                return x
+            elif(x.val > key):
+                x = x.left
+            else:
+                x = x.right
+
+        raise KeyError
         # END SOLUTION
 
     def __contains__(self, el):
@@ -60,6 +69,15 @@ class HBStree:
         Return True if el exists in the current version of the tree.
         """
         # BEGIN SOLUTION
+        x = self.root_versions[-1]
+        while(x!=None):
+            if(x.val == el):
+                return True
+            elif(x.val < el):
+                x = x.right
+            else:
+                x = x.left
+        return False
         # END SOLUTION
 
     def insert(self,key):
@@ -69,12 +87,71 @@ class HBStree:
         from creating a new version.
         """
         # BEGIN SOLUTION
-        # END SOLUTION
+        x = self.root_versions[-1]
+        if x == None:
+            x = self.INode(key, None, None)
+            self.root_versions.append(x)
+            return
+        y = []
+        while(x):
+            y.append(x)
+            if key < x.val:
+              x = x.left
+            elif key > x.val:
+              x = x.right
+            elif x.val == key:
+              return
+            else:
+              break
+        p = y.pop()
+        thing = self.INode(key, None, None)
+        left = key < p.val
+        if left:
+            big = self.INode(p.val, thing, p.right)
+        else:
+            big = self.INode(p.val, p.left, thing)
+        while len(y) > 0:
+            p = y.pop()
+            if p.val > big.val:
+                big = self.INode(p.val, big, p.right)
+            else:
+                big = self.INode(p.val, p.left, big)
+        self.root_versions.append(big)
 
+        
     def delete(self,key):
-        """Delete key from the tree, creating a new version of the tree. If key does not exist in the current version of the tree, then do nothing and refrain from creating a new version."""
-        # BEGIN SOLUTION
-        # END SOLUTION
+        if(key in self):
+            x = self.root_versions[-1]
+            y = []
+            while True:
+                if x == None or key == x.val:
+                    gone = x
+                    break
+                if x.left != None and key < x.val:
+                    y.append([x, -1])
+                    x = x.left
+                if x.right != None and key > x.val:
+                    y.append([x, 1])
+                    x = x.right
+            z = []
+            if x.left != None:
+                x = x.left
+                while x.right != None:
+                    y.append(x)
+                    x = x.right
+            n = None
+            if len(z) != 0:
+                for index in range(len(z) - 1, 0, -1):
+                    n = self.INode(z[index].val, z[index].left, n)
+                n = self.INode(x.val, gone.left, n)
+            else:
+                n = gone.right
+            for index in range(len(y) - 1 , -1, -1):
+                if y[index][1] == -1:
+                    n = self.INode(y[index][0].val, n, y[index][0].right)
+                else:
+                    n = self.INode(y[index][0].val, y[index][0].left, n)
+            self.root_versions.append(n)
 
     @staticmethod
     def subtree_size(node):
@@ -145,6 +222,14 @@ class HBStree:
         if timetravel < 0 or timetravel >= len(self.root_versions):
             raise IndexError(f"valid versions for time travel are 0 to {len(self.root_versions) -1}, but was {timetravel}")
         # BEGIN SOLUTION
+        thing = self.root_versions[-1 - timetravel]
+        def next(x):
+            if x:
+                yield from next(x.left)
+                yield x.val
+                yield from next(x.right)
+
+        yield from next(thing)
         # END SOLUTION
 
     @staticmethod
