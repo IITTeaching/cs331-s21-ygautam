@@ -10,7 +10,7 @@ def sort(lst, current):
     bits = [0] * 128
     final = [None] * len(lst)
     for i in range(0,len(lst)):
-      if len(lst[i]) - 1 < current:
+      if(len(lst[i]) - 1 < current):
        x=0
       else:
        x = ord(lst[i].decode('ascii')[current])
